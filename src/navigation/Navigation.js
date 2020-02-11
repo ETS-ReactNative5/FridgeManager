@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Image, StyleSheet } from 'react-native';
 import React from 'react';
-
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../definitions/colors';
 import { assets } from '../definitions/assets';
 import Search from '../components/search/Search';
@@ -41,24 +41,24 @@ const TabNavigation = createBottomTabNavigator({
     Search: {
       screen: SearchNavigation,
       navigationOptions: {
-        tabBarIcon: ({ focused, color, size }) => {
-          return <Image style={ styles.tabIcon } source={ assets.icons.search }/>
+        tabBarIcon: ({tintColor}) => {
+          return <Ionicons name="md-search" size={35} color={tintColor} />
         },
       },
     },
     Me: {
       screen: MeNavigation,
       navigationOptions: {
-        tabBarIcon: () => {
-          return <Image style={ styles.tabIcon } source={ assets.icons.me }/>
+        tabBarIcon: ({tintColor}) => {
+          return <Ionicons name="md-person" size={35} color={tintColor} />
         },
       },
     },
     Settings: {
       screen: SettingsNavigation,
       navigationOptions: {
-        tabBarIcon: () => {
-          return <Image style={ styles.tabIcon } source={ assets.icons.settings }/>
+        tabBarIcon: ({tintColor}) => {
+          return <Ionicons name="md-settings" size={35} color={tintColor} />
         },
       },
     },
@@ -66,7 +66,6 @@ const TabNavigation = createBottomTabNavigator({
   {
     tabBarOptions: {
       showLabel: false,
-      activeBackgroundColor: colors.mainOrangeColor,
       activeTintColor: colors.mainOrangeColor,
     },
     initialRouteName: 'Me',

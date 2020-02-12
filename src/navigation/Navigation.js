@@ -1,11 +1,10 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../definitions/colors';
-import { assets } from '../definitions/assets';
 import Search from '../components/search/Search';
 import Me from '../components/me/Me';
 import Settings from '../components/settings/Settings';

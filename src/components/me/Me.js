@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
-import {Ionicons} from '@expo/vector-icons';
 import {colors} from '../../definitions/colors';
 
 const Me = () => {

@@ -1,12 +1,35 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import { colors } from '../../definitions/colors';
-import {Icon} from 'react-native-elements';
+import {Card, Icon} from 'react-native-elements';
 
 const RecipeItem = ( {recipe, onClickOnMe} ) => {
 
     return (
-        <TouchableOpacity style={ styles.mainContainer }
+        <Card
+            image={{ uri: 'https://spoonacular.com/recipeImages/' + recipe.image }}
+        >
+            <Text style={ styles.recipeNameText }>
+                { recipe.title }
+            </Text>
+            <View style={ styles.ratesContainer }>
+                <View style={ styles.ratesContainer }>
+                    <View style={ styles.commentContainer }>
+                        <Icon type="ionicon" name="md-people" size={18} color="white" iconStyle={ styles.recipeDataIcons } />
+                        <Text style={ styles.recipeDataText }>
+                            { recipe.servings }
+                        </Text>
+                    </View>
+                    <View style={ styles.markContainer }>
+                        <Icon type="ionicon" name="md-time" size={18} color="white" iconStyle={ styles.recipeDataIcons } />
+                        <Text style={ styles.recipeDataText }>
+                            { recipe.readyInMinutes.toString() } minutes
+                        </Text>
+                    </View>
+                </View>
+            </View>
+        </Card>
+        /*<TouchableOpacity style={ styles.mainContainer }
                           onPress={ () => onClickOnMe(recipe.id) } >
             <Image style={ styles.recipeImage }
                    source={{ uri: 'https://spoonacular.com/recipeImages/' + recipe.image }}/>
@@ -33,7 +56,7 @@ const RecipeItem = ( {recipe, onClickOnMe} ) => {
                     </View>
                 </View>
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity>*/
     );
 };
 

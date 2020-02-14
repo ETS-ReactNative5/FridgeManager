@@ -8,10 +8,12 @@ import { colors } from '../definitions/colors';
 import Search from '../components/search/Search';
 import Me from '../components/me/Me';
 import Settings from '../components/settings/Settings';
+import Recipe from '../components/shared/Recipe';
 
 const SearchNavigation = createStackNavigator(
   {
     Search: Search,
+    Recipe: Recipe
   },
   {
     initialRouteName: 'Search',
@@ -65,7 +67,7 @@ const TabNavigation = createBottomTabNavigator({
   {
     tabBarOptions: {
       showLabel: false,
-      activeTintColor: colors.mainOrangeColor,
+      activeTintColor: colors.primary,
     },
     initialRouteName: 'Me',
   });

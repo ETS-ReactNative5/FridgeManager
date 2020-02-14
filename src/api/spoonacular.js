@@ -1,5 +1,6 @@
 const API_KEY = 'fbc1dcbaa05443b1a6383a0b96c077e7';
 const API_URL = 'https://api.spoonacular.com';
+const WEB_URL = 'https://spoonacular.com';
 
 export async function searchRecipes(searchTerm, cuisine, diet, offset) {
     try {
@@ -28,4 +29,25 @@ export async function searchRecipes(searchTerm, cuisine, diet, offset) {
         console.log('Error with function searchRecipes ' + error.message);
         throw error;
     }
+}
+
+export async function getRecipeInformation(id) {
+    try {
+        let url = `${ API_URL }/recipes/${id}/information?apiKey=${ API_KEY }`;
+        const response = await fetch(url);
+
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error(response.status);
+
+    } catch (error) {
+        console.log('Error with function getRecipeInformation ' + error.message);
+        throw error;
+    }
+}
+
+
+export function getRecipeImageUri(imgName) {
+    return `${WEB_URL}/recipeImages/${imgName}`;
 }

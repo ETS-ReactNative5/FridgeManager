@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     touchableOpacity: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: colors.mainOrangeColor,
+        backgroundColor: colors.primary,
         height: 60,
         width: 160,
         borderRadius: 5,

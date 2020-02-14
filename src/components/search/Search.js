@@ -4,14 +4,16 @@ import { Button, Icon } from 'react-native-elements';
 import {colors} from '../../definitions/colors';
 import {searchRecipes} from '../../api/spoonacular';
 import ListRecipes from '../shared/ListRecipes';
+import {diets} from '../../api/diets';
+import {cuisines} from '../../api/cuisines';
 
 const Search = ({navigation}) => {
     const [recipes, setRecipes] = useState([]);
     const [isRefreshing, setRefreshingState] = useState( false );
     const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
+    const [diet, setDiet] = useState( '' );
+    const [cuisine, setCuisine] = useState( '' );
     const searchTerm = useRef("");
-    const diet = useRef("");
-    const cuisine = useRef("");
     const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 
     const _inputSearchTermChanged = (text) => {
@@ -22,7 +24,7 @@ const Search = ({navigation}) => {
         setRefreshingState( true );
         setErrorDataLoading( false );
         try {
-            let apiSearchResult = (await searchRecipes(searchTerm.current, cuisine.current, diet.current, paginationData.current.currentOffset));
+            let apiSearchResult = (await searchRecipes(searchTerm.current, cuisine, diet, paginationData.current.currentOffset));
             paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults };
             setRecipes( [...prevRecipes, ...apiSearchResult.results] );
         } catch (error) {
@@ -76,34 +78,31 @@ const Search = ({navigation}) => {
                     <Picker
                       mode="dropdown"
                       itemStyle={styles.itemStyle}
-                      selectedValue=""
+                      selectedValue={ diet }
                       style={ styles.picker }
+                      onValueChange={ (itemValue) => setDiet(itemValue) }
                     >
                         <Picker.Item label="Diet?" value="" />
-                        <Picker.Item label="Vegan" value="vegan" />
-                        <Picker.Item label="Halal" value="halal" />
+                        { diets.map(diet => <Picker.Item key={diet} label={diet} value={diet} />) }
                     </Picker>
                     <Picker
                         mode="dropdown"
                         itemStyle={styles.itemStyle}
-                        selectedValue=""
-                        prompt="Cuisine"
+                        selectedValue={ cuisine }
                         style={ styles.picker }
+                        onValueChange={ (itemValue) => setCuisine(itemValue) }
                     >
                         <Picker.Item label="Cuisine?" value="" />
-                        <Picker.Item label="Chinese" value="chinese" />
-                        <Picker.Item label="Japanese" value="japanese" />
-                        <Picker.Item label="French" value="french" />
-                        <Picker.Item label="Italian" value="italian" />
+                        { cuisines.map(cuisine => <Picker.Item key={cuisine} label={cuisine} value={cuisine} />) }
                     </Picker>
                 </View>
                 <View style={ styles.rowCenter }>
-                    <Text>OR</Text>
+                    <Text style={{ fontStyle: 'italic'}}>OR</Text>
                 </View>
                 <View style={ styles.rowCenter }>
                     <Button
                         title="What can I cook today?"
-                        color={ colors.mainOrangeColor }
+                        color={ colors.primary }
                         buttonStyle={ styles.whatCanICookButton}
                         style={ styles.searchButton }
                     />
@@ -151,23 +150,23 @@ const styles = StyleSheet.create({
         height: 45,
         width: '90%',
         borderBottomWidth : 1.0,
-        borderColor: colors.mainOrangeColor,
+        borderColor: colors.primary,
         marginBottom: 5
     },
     searchButton: {
-        backgroundColor: colors.mainOrangeColor,
+        backgroundColor: colors.primary,
         width: 30,
         height: 30,
     },
     whatCanICookButton: {
-        backgroundColor: colors.mainOrangeColor,
+        backgroundColor: colors.primary,
         width: '100%',
         height: 30,
     },
     picker: {
         height: 35,
         width: '45%',
-        backgroundColor: '#535353',
+        backgroundColor: colors.secondary,
         color: 'white',
         marginHorizontal: 5,
         textAlign: 'center'

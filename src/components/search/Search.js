@@ -1,9 +1,54 @@
-import React from 'react';
-import { View, TextInput, Text, Picker, StyleSheet, Keyboard } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {View, TextInput, Text, Picker, StyleSheet, Keyboard, FlatList} from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import {colors} from '../../definitions/colors';
+import {searchRecipes} from '../../api/spoonacular';
+import ListRecipes from '../shared/ListRecipes';
 
-const Search = () => {
+const Search = ({navigation}) => {
+    const [recipes, setRecipes] = useState([]);
+    const [isRefreshing, setRefreshingState] = useState( false );
+    const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
+    const searchTerm = useRef("");
+    const diet = useRef("");
+    const cuisine = useRef("");
+    const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
+
+    const _inputSearchTermChanged = (text) => {
+        searchTerm.current = text;
+    };
+
+    const _loadRecipes = async (prevRecipes) => {
+        setRefreshingState( true );
+        setErrorDataLoading( false );
+        try {
+            let apiSearchResult = (await searchRecipes(searchTerm.current, cuisine.current, diet.current, paginationData.current.currentOffset));
+            paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults };
+            setRecipes( [...prevRecipes, ...apiSearchResult.results] );
+        } catch (error) {
+            paginationData.current = { currentOffset: 0, maxResults: 0 };
+            setRecipes( [] );
+            setErrorDataLoading( true );
+        } finally {
+            setRefreshingState( false );
+        }
+    };
+
+    const _searchRecipes = () => {
+        paginationData.current = { currentOffset: 0, maxResults: 0 };
+        _loadRecipes([]);
+    };
+
+    const _loadMoreRecipes = () => {
+        if( paginationData.current.currentOffset < paginationData.current.maxResults ) {
+            _loadRecipes(recipes);
+        }
+    };
+
+    const _navigateToRecipeDetails = (recipeID) => {
+        navigation.navigate("Recipe", { recipeID });
+    };
+
     return (
         <View style={ styles.mainView }>
             <View style={ styles.headerView }>
@@ -11,8 +56,8 @@ const Search = () => {
                     <TextInput
                         placeholder='Recipe name'
                         style={ styles.searchField }
-                        onChangeText={ text => console.log( text ) }
-                        onSubmitEditing={ console.log("sumbit") }
+                        onChangeText={ text => _inputSearchTermChanged( text ) }
+                        onSubmitEditing={ _searchRecipes }
                     />
                     <Button
                         icon={
@@ -23,7 +68,7 @@ const Search = () => {
                                 color="white"
                             />
                         }
-                        onPress={ () => { console.log("search"); Keyboard.dismiss() } }
+                        onPress={ () => { _searchRecipes(); Keyboard.dismiss() } }
                         buttonStyle={ styles.searchButton }
                     />
                 </View>
@@ -64,6 +109,13 @@ const Search = () => {
                     />
                 </View>
             </View>
+            <ListRecipes
+                recipes={ recipes }
+                refreshingState={ isRefreshing }
+                onClickNavigation={ _navigateToRecipeDetails }
+                refreshRecipes={ _searchRecipes }
+                loadMoreRecipes={ _loadMoreRecipes }
+            />
         </View>
     );
 };
@@ -72,11 +124,13 @@ export default Search;
 
 const styles = StyleSheet.create({
     mainView: {
+        flex: 1,
     },
     headerView: {
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: 5
+        paddingTop: 5,
+        marginBottom: 5
     },
     rowCenter: {
         flexDirection: 'row',
@@ -124,5 +178,8 @@ const styles = StyleSheet.create({
         color: 'black',
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    listRecipes: {
+        flex: 1,
     }
 });

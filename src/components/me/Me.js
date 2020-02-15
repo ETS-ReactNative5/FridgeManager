@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
-import {Ionicons} from '@expo/vector-icons';
 import {colors} from '../../definitions/colors';
 
 const Me = () => {
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     touchableOpacity: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: colors.mainOrangeColor,
+        backgroundColor: colors.primary,
         height: 60,
         width: 160,
         borderRadius: 5,

@@ -42,7 +42,6 @@ export default RecipeItem;
 
 const styles = StyleSheet.create({
     recipeNameText: {
-        fontWeight: 'bold',
         textAlign: 'center',
         fontSize: 18,
     },

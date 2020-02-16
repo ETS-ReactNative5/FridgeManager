@@ -41,5 +41,5 @@ export default connect(mapStateToProps)(MyRecipes);
 const styles = StyleSheet.create({
     mainView: {
         flex: 1,
-    },
+    }
 });

@@ -14,6 +14,7 @@ const ListRecipes = ( {recipes, showSaveIcon, refreshingState, myRecipes, onClic
     return (
         <FlatList
             style={ styles.listRecipes }
+            contentContainerStyle={{ paddingBottom:15 }}
             data={ recipes }
             keyExtractor={ (item) => item.id.toString() }
             extraData={ myRecipes }

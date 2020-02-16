@@ -1,7 +1,6 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {StyleSheet} from 'react-native';
 import React from 'react';
 import {Ionicons} from '@expo/vector-icons';
 import {colors} from '../definitions/colors';
@@ -80,10 +79,3 @@ const TabNavigation = createBottomTabNavigator({
     });
 
 export default createAppContainer(TabNavigation);
-
-const styles = StyleSheet.create({
-    tabIcon: {
-        width: 40,
-        height: 40,
-    },
-});

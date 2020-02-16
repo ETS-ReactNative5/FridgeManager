@@ -110,6 +110,7 @@ const Search = ({navigation}) => {
             </View>
             <ListRecipes
                 recipes={ recipes }
+                showSaveIcon={ true }
                 refreshingState={ isRefreshing }
                 onClickNavigation={ _navigateToRecipeDetails }
                 refreshRecipes={ _searchRecipes }

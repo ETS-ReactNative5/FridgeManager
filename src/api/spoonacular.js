@@ -1,6 +1,7 @@
 const API_KEY = 'fbc1dcbaa05443b1a6383a0b96c077e7';
 const API_URL = 'https://api.spoonacular.com';
 const WEB_URL = 'https://spoonacular.com';
+const RECIPE_IMAGE_SIZE = '556x370';
 
 export async function searchRecipes(searchTerm, cuisine, diet, offset) {
     try {
@@ -49,5 +50,9 @@ export async function getRecipeInformation(id) {
 
 
 export function getRecipeImageUri(imgName) {
+    // If imgName is already an Uri, don't do anything to it
+    if (imgName.match(/^http(s?):\/\/.*/)) {
+        return imgName;
+    }
     return `${WEB_URL}/recipeImages/${imgName}`;
 }

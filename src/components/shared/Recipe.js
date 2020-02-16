@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { getRecipeInformation } from '../../api/spoonacular';
+import { connect } from 'react-redux';
 import { colors } from '../../definitions/colors';
 import { assets } from '../../definitions/assets';
-import {Icon} from 'react-native-elements';
 
-const Recipe = ( {navigation} ) => {
+const Recipe = ( {navigation, myRecipes, dispatch} ) => {
   const [isLoading, setLoadingState] = useState( true );
   const [recipeData, setRecipeData] = useState( null );
 
@@ -33,11 +33,33 @@ const Recipe = ( {navigation} ) => {
     return null;
   };
 
+  const _saveRecipe = async () => {
+    if( recipeData ) {
+      const action = { type: 'SAVE_RECIPE', value: recipeData };
+      dispatch(action);
+    }
+  };
+
+  const _unsaveRecipe = async () => {
+    if( recipeData ) {
+      const action = { type: 'UNSAVE_RECIPE', value: recipeData };
+      dispatch(action);
+    }
+  };
+
   const _displaySaveRecipe = () => {
+    if( myRecipes.findIndex(obj => obj.id === navigation.getParam('recipeID')) !== -1 ) {
+      return (
+        <TouchableOpacity onPress={ _unsaveRecipe }>
+          <Image  style={ styles.saveIcon }
+                  source={ assets.toUnsaveIcon } />
+        </TouchableOpacity>
+      );
+    }
     return (
-      <TouchableOpacity onPress={ () => console.log('save') }>
+      <TouchableOpacity onPress={ _saveRecipe }>
         <Image  style={ styles.saveIcon }
-                source={ assets.toUnsaveIcon } />
+                source={ assets.toSaveIcon } />
       </TouchableOpacity>
     );
   };
@@ -137,7 +159,13 @@ const Recipe = ( {navigation} ) => {
   );
 };
 
-export default Recipe;
+const mapStateToProps = (state) => {
+  return {
+    myRecipes: state.recipes
+  }
+};
+
+export default connect(mapStateToProps)(Recipe);
 
 const styles = StyleSheet.create({
   mainView: {

@@ -3,25 +3,36 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
 import {colors} from '../../definitions/colors';
 
-const Me = () => {
+const Me = ({navigation}) => {
+
+    const _navigateToMyFridge = () => {
+        navigation.navigate("MyFridge");
+    };
+    const _navigateToMyList = () => {
+        navigation.navigate("MyList");
+    };
+    const _navigateToMyRecipes = () => {
+        navigation.navigate("MyRecipes");
+    };
+
     return (
         <View style={ styles.mainView }>
             <TouchableOpacity
-                onPress={() => { console.log('My Fridge'); }}
+                onPress={ _navigateToMyFridge }
                 style={ styles.touchableOpacity }
             >
                 <Icon type="material-community" name="fridge-outline" size={30} color="white" iconStyle={ styles.icon } />
                 <Text style={ styles.buttonText }>My fridge</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => { console.log('My list'); }}
+                onPress={ _navigateToMyList }
                 style={ styles.touchableOpacity }
             >
                 <Icon type="ionicon" name="md-cart" size={30} color="white" iconStyle={ styles.icon } />
                 <Text style={ styles.buttonText }>My list</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => { console.log('My recipes'); }}
+                onPress={ _navigateToMyRecipes }
                 style={ styles.touchableOpacity }
             >
                 <Icon type="ionicon" name="md-bookmarks" size={30} color="white" iconStyle={ styles.icon } />

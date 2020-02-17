@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import ListRecipes from '../shared/ListRecipes';
 import DisplayError from '../shared/Error';
+import recipeReducer from '../../store/reducers/recipeReducer';
 
 const MyRecipes = ( {myRecipes, navigation} ) => {
 
@@ -32,7 +33,7 @@ const MyRecipes = ( {myRecipes, navigation} ) => {
 
 const mapStateToProps = (state) => {
     return {
-        myRecipes: state.recipes
+        myRecipes: state.recipeReducer.recipes
     }
 };
 

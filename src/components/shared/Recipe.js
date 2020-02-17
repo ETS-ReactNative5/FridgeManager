@@ -14,6 +14,7 @@ import { getRecipeInformation } from '../../api/spoonacular';
 import { connect } from 'react-redux';
 import { colors } from '../../definitions/colors';
 import { assets } from '../../definitions/assets';
+import recipeReducer from '../../store/reducers/recipeReducer';
 
 const Recipe = ( {navigation, myRecipes, dispatch} ) => {
     const [isLoading, setLoadingState] = useState( true );
@@ -226,7 +227,7 @@ const Recipe = ( {navigation, myRecipes, dispatch} ) => {
 
 const mapStateToProps = (state) => {
     return {
-        myRecipes: state.recipes
+        myRecipes: state.recipeReducer.recipes
     }
 };
 

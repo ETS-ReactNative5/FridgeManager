@@ -34,7 +34,7 @@ const ListRecipes = ( {recipes, showSaveIcon, refreshingState, myRecipes, onClic
 
 const mapStateToProps = (state) => {
     return {
-        myRecipes: state.recipes
+        myRecipes: state.recipeReducer.recipes
     }
 };
 

@@ -57,11 +57,11 @@ const Settings = ({settings, dispatch}) => {
                 <Text style={ styles.titleText }>API</Text>
                 <View style={ styles.apiLineView }>
                     <Text>API credits remaining: </Text>
-                    <Text style={{ fontWeight: 'bold'}}>147.8</Text>
+                    <Text style={{ fontWeight: 'bold'}}>{ settings.apiCredits }</Text>
                 </View>
                 <View style={ styles.apiLineView }>
                     <Text>Last update: </Text>
-                    <Text style={{ fontWeight: 'bold'}}>14 November, 9:27 pm</Text>
+                    <Text style={{ fontWeight: 'bold'}}>{ settings.lastUpdate }</Text>
                 </View>
             </View>
             <View style={ styles.clearDataView }>

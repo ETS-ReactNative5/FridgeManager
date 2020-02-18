@@ -21,10 +21,13 @@ function saveSettings(state = initialState, action) {
             };
             return nextState || state;
         case 'SET_API_CREDITS':
+            const now = new Date();
+            const lastUpdate = now.toLocaleDateString() + ' at ' + now.toLocaleTimeString();
+
             nextState = {
                 ...state,
                 apiCredits: action.value,
-                lastUpdate: new Date()
+                lastUpdate
             };
             return nextState || state;
         case 'CLEAR_DATA':

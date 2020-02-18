@@ -1,7 +1,8 @@
+import {store} from '../store/config';
+
 const API_KEY = 'fbc1dcbaa05443b1a6383a0b96c077e7';
 const API_URL = 'https://api.spoonacular.com';
 const WEB_URL = 'https://spoonacular.com';
-const RECIPE_IMAGE_SIZE = '556x370';
 
 export async function searchRecipes(searchTerm, cuisine, diet, offset) {
     try {
@@ -19,12 +20,7 @@ export async function searchRecipes(searchTerm, cuisine, diet, offset) {
             url = `${ url }&offset=${ offset }`
         }
 
-        const response = await fetch(url);
-
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error(response.status);
+        return get(url);
 
     } catch (error) {
         console.log('Error with function searchRecipes ' + error.message);
@@ -34,13 +30,7 @@ export async function searchRecipes(searchTerm, cuisine, diet, offset) {
 
 export async function getRecipeInformation(id) {
     try {
-        let url = `${ API_URL }/recipes/${id}/information?apiKey=${ API_KEY }`;
-        const response = await fetch(url);
-
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error(response.status);
+        return get(`${ API_URL }/recipes/${id}/information?apiKey=${ API_KEY }`)
 
     } catch (error) {
         console.log('Error with function getRecipeInformation ' + error.message);
@@ -55,4 +45,19 @@ export function getRecipeImageUri(imgName) {
         return imgName;
     }
     return `${WEB_URL}/recipeImages/${imgName}`;
+}
+
+export async function get(url) {
+    const response = await fetch(url);
+
+    if (response.ok) {
+        const quotaUsed = response.headers.get('x-api-quota-used');
+        if (quotaUsed !== null) {
+            const action = { type: 'SET_API_CREDITS', value: 150 - quotaUsed };
+            store.dispatch(action);
+        }
+        return response.json();
+    }
+
+    throw new Error(response.status);
 }

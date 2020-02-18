@@ -25,9 +25,24 @@ const SearchNavigation = createStackNavigator(
 const MeNavigation = createStackNavigator(
     {
         Me: Me,
-        MyFridge: MyFridge,
-        MyList: MyList,
-        MyRecipes: MyRecipes,
+        MyFridge: {
+            screen: MyFridge,
+            navigationOptions: {
+                title: 'My fridge'
+            },
+        },
+        MyList: {
+            screen: MyList,
+            navigationOptions: {
+                title: 'My list'
+            },
+        },
+        MyRecipes: {
+            screen: MyRecipes,
+            navigationOptions: {
+                title: 'My recipes'
+            },
+        },
         Recipe: Recipe
     },
     {

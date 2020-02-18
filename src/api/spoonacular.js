@@ -3,6 +3,7 @@ import {store} from '../store/config';
 const API_KEY = 'fbc1dcbaa05443b1a6383a0b96c077e7';
 const API_URL = 'https://api.spoonacular.com';
 const WEB_URL = 'https://spoonacular.com';
+const API_CREDITS_PER_DAY = 150;
 
 export async function searchRecipes(searchTerm, cuisine, diet, offset) {
     try {
@@ -38,7 +39,6 @@ export async function getRecipeInformation(id) {
     }
 }
 
-
 export function getRecipeImageUri(imgName) {
     // If imgName is already an Uri, don't do anything to it
     if (imgName.match(/^http(s?):\/\/.*/)) {
@@ -53,7 +53,7 @@ export async function get(url) {
     if (response.ok) {
         const quotaUsed = response.headers.get('x-api-quota-used');
         if (quotaUsed !== null) {
-            const action = { type: 'SET_API_CREDITS', value: 150 - quotaUsed };
+            const action = { type: 'SET_API_CREDITS', value: API_CREDITS_PER_DAY - quotaUsed };
             store.dispatch(action);
         }
         return response.json();

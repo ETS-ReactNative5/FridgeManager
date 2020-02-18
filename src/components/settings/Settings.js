@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, CheckBox, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {View, Text, CheckBox, TouchableOpacity, StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {colors} from '../../definitions/colors';
 import { connect } from 'react-redux';
@@ -30,6 +30,25 @@ const Settings = ({settings, dispatch}) => {
         dispatch( { type: 'SWITCH_REMOVE_FROM_LIST_WHEN_ADDED_TO_FRIDGE' });
     };
 
+    const _displayApiInfo = () => {
+        const apiCredits = !!settings.apiCredits ? settings.apiCredits : 'never checked';
+        let apiInfoJSX = [
+            <View style={ styles.apiLineView }>
+                <Text>API credits remaining: </Text>
+                <Text style={{ fontWeight: 'bold'}}>{ apiCredits }</Text>
+            </View>
+        ];
+        if (!!settings.lastUpdate) {
+            apiInfoJSX.push(
+                <View style={ styles.apiLineView }>
+                    <Text>Last update: </Text>
+                    <Text style={{ fontWeight: 'bold'}}>{ settings.lastUpdate }</Text>
+                </View>
+            )
+        }
+        return apiInfoJSX;
+    };
+
     return (
         <View style={ styles.mainView }>
             <View style={ styles.configurationView }>
@@ -55,14 +74,7 @@ const Settings = ({settings, dispatch}) => {
             </View>
             <View style={ styles.apiView }>
                 <Text style={ styles.titleText }>API</Text>
-                <View style={ styles.apiLineView }>
-                    <Text>API credits remaining: </Text>
-                    <Text style={{ fontWeight: 'bold'}}>{ settings.apiCredits }</Text>
-                </View>
-                <View style={ styles.apiLineView }>
-                    <Text>Last update: </Text>
-                    <Text style={{ fontWeight: 'bold'}}>{ settings.lastUpdate }</Text>
-                </View>
+                { _displayApiInfo() }
             </View>
             <View style={ styles.clearDataView }>
                 <TouchableOpacity

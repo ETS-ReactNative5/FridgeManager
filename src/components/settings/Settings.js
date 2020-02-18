@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, TextInput, Button, CheckBox, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {View, Text, CheckBox, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {colors} from '../../definitions/colors';
 import { connect } from 'react-redux';
 
-const Settings = ({navigation, dispatch}) => {
+const Settings = ({settings, dispatch}) => {
 
     const _confirmClearData = () => {
         Alert.alert(
@@ -19,8 +19,15 @@ const Settings = ({navigation, dispatch}) => {
     };
 
     const _clearData = async () => {
-        const action = { type: 'CLEAR_DATA' };
-        dispatch(action);
+        dispatch( { type: 'CLEAR_DATA' });
+    };
+
+    const _switchAddToListWhenRemovedFromFridge = async () => {
+        dispatch( { type: 'SWITCH_ADD_TO_LIST_WHEN_REMOVED_FROM_FRIDGE' });
+    };
+
+    const _switchRemoveFromListWhenAddedToFridge = async () => {
+        dispatch( { type: 'SWITCH_REMOVE_FROM_LIST_WHEN_ADDED_TO_FRIDGE' });
     };
 
     return (
@@ -28,11 +35,21 @@ const Settings = ({navigation, dispatch}) => {
             <View style={ styles.configurationView }>
                 <Text style={ styles.titleText }>Configuration</Text>
                 <View style={ styles.configLineView }>
-                    <View style={ styles.configCheckBoxView }><CheckBox/></View>
+                    <View style={ styles.configCheckBoxView }>
+                        <CheckBox
+                            value={settings.addToListWhenRemovedFromFridge}
+                            onValueChange={ _switchAddToListWhenRemovedFromFridge }
+                        />
+                    </View>
                     <View style={ styles.configCheckTextView }><Text>Add ingredients removed from the fridge to the shopping list</Text></View>
                 </View>
                 <View style={ styles.configLineView }>
-                    <View style={ styles.configCheckBoxView }><CheckBox/></View>
+                    <View style={ styles.configCheckBoxView }>
+                        <CheckBox
+                            value={settings.removeFromListWhenAddedToFridge}
+                            onValueChange={ _switchRemoveFromListWhenAddedToFridge }
+                        />
+                    </View>
                     <View style={ styles.configCheckTextView }><Text>When adding an ingredient to the fridge from the shopping list, remove it from the shopping list</Text></View>
                 </View>
             </View>
@@ -60,7 +77,13 @@ const Settings = ({navigation, dispatch}) => {
     );
 };
 
-export default connect()(Settings);
+const mapStateToProps = (state) => {
+    return {
+        settings: state.settingsReducer
+    }
+};
+
+export default connect(mapStateToProps)(Settings);
 
 const styles = StyleSheet.create({
     mainView: {

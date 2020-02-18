@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 const initialState = {
     addToListWhenRemovedFromFridge: false,
     removeFromListWhenAddedToFridge: false,
@@ -24,7 +26,7 @@ function saveSettings(state = initialState, action) {
             nextState = {
                 ...state,
                 apiCredits: action.value,
-                lastUpdate: new Date()
+                lastUpdate: format(new Date(), 'MMMM d, K:mm a')
             };
             return nextState || state;
         case 'CLEAR_DATA':

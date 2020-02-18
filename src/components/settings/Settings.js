@@ -2,8 +2,9 @@ import React from 'react';
 import {View, Text, TextInput, Button, CheckBox, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {colors} from '../../definitions/colors';
+import { connect } from 'react-redux';
 
-const Settings = () => {
+const Settings = ({navigation, dispatch}) => {
 
     const _confirmClearData = () => {
         Alert.alert(
@@ -17,8 +18,9 @@ const Settings = () => {
         );
     };
 
-    const _clearData = () => {
-        console.log('TODO: clear data');
+    const _clearData = async () => {
+        const action = { type: 'CLEAR_DATA' };
+        dispatch(action);
     };
 
     return (
@@ -58,7 +60,7 @@ const Settings = () => {
     );
 };
 
-export default Settings;
+export default connect()(Settings);
 
 const styles = StyleSheet.create({
     mainView: {

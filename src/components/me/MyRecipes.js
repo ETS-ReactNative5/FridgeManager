@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import ListRecipes from '../shared/ListRecipes';
 import DisplayError from '../shared/Error';
-import recipeReducer from '../../store/reducers/recipeReducer';
 
 const MyRecipes = ( {myRecipes, navigation} ) => {
 

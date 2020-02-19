@@ -3,7 +3,7 @@ import {View, TextInput, Text, Picker, StyleSheet, Keyboard, FlatList} from 'rea
 import { Button, Icon } from 'react-native-elements';
 import {colors} from '../../definitions/colors';
 import {searchRecipes} from '../../api/spoonacular';
-import ListRecipes from '../shared/ListRecipes';
+import ListRecipes from './ListRecipes';
 import {diets} from '../../api/diets';
 import {cuisines} from '../../api/cuisines';
 

@@ -5,12 +5,12 @@ import { colors } from '../../../definitions/colors';
 
 const IngredientFilter = ({ onSortByName, onSortByAisle, onSearchStringUpdate }) => {
 
-    const searchTerm = useRef("");
+    const searchString = useRef("");
     const [sortByName, setSortByName] = useState(true);
     const [sortByAisle, setSortByAisle] = useState(false);
 
-    const _inputSearchTermChanged = (text) => {
-        searchTerm.current = text;
+    const _inputSearchStringChanged = (text) => {
+        searchString.current = text;
         onSearchStringUpdate(text);
     };
 
@@ -34,7 +34,7 @@ const IngredientFilter = ({ onSortByName, onSortByAisle, onSearchStringUpdate })
                 <TextInput
                     placeholder='Ingredient name'
                     style={ styles.searchField }
-                    onChangeText={ text => _inputSearchTermChanged(text) }
+                    onChangeText={ text => _inputSearchStringChanged(text) }
                 />
             </View>
             <View style={ styles.row }>

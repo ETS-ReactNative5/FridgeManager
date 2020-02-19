@@ -13,18 +13,18 @@ const Search = ({navigation}) => {
     const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
     const [diet, setDiet] = useState( '' );
     const [cuisine, setCuisine] = useState( '' );
-    const searchTerm = useRef("");
+    const searchString = useRef("");
     const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
 
-    const _inputSearchTermChanged = (text) => {
-        searchTerm.current = text;
+    const _inputSearchStringChanged = (text) => {
+        searchString.current = text;
     };
 
     const _loadRecipes = async (prevRecipes) => {
         setRefreshingState( true );
         setErrorDataLoading( false );
         try {
-            let apiSearchResult = (await searchRecipes(searchTerm.current, cuisine, diet, paginationData.current.currentOffset));
+            let apiSearchResult = (await searchRecipes(searchString.current, cuisine, diet, paginationData.current.currentOffset));
             paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults };
             setRecipes( [...prevRecipes, ...apiSearchResult.results] );
         } catch (error) {
@@ -58,7 +58,7 @@ const Search = ({navigation}) => {
                     <TextInput
                         placeholder='Recipe name'
                         style={ styles.searchField }
-                        onChangeText={ text => _inputSearchTermChanged( text ) }
+                        onChangeText={ text => _inputSearchStringChanged( text ) }
                         onSubmitEditing={ _searchRecipes }
                     />
                     <Button

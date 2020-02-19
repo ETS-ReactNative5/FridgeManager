@@ -5,11 +5,11 @@ const API_URL = 'https://api.spoonacular.com';
 const WEB_URL = 'https://spoonacular.com';
 const API_CREDITS_PER_DAY = 150;
 
-export async function searchRecipes(searchTerm, cuisine, diet, offset) {
+export async function searchRecipes(searchString, cuisine, diet, offset) {
     try {
         let url = `${ API_URL }/recipes/search?apiKey=${ API_KEY }`;
-        if (!!searchTerm) {
-            url = `${ url }&query=${ searchTerm }`
+        if (!!searchString) {
+            url = `${ url }&query=${ searchString }`
         }
         if (!!cuisine) {
             url = `${ url }&cuisine=${ cuisine }`

@@ -17,6 +17,7 @@ const MyList = ({list, navigation}) => {
                 ingredients={ list }
                 refreshingState={ false }
                 refreshIngredients={ null }
+                onSearchStringUpdate={ null }
                 source="list"
                 destination="fridge"
                 canDelete={ true }

@@ -1,4 +1,6 @@
 const initialState = {
+  addToListWhenRemovedFromFridge: false,
+  removeFromListWhenAddedToFridge: false,
   fridge: [],
   list: []
 };
@@ -9,13 +11,15 @@ function saveIngredients(state = initialState, action) {
     case 'ADD_TO_FRIDGE':
       nextState = {
         ...state,
-        fridge: [...state.fridge, action.value]
+        fridge: [...state.fridge, action.value],
+        list: state.removeFromListWhenAddedToFridge ? state.list.filter(obj => obj.id !== action.value.id) : state.list
       };
       return nextState || state;
     case 'REMOVE_FROM_FRIDGE':
       nextState = {
         ...state,
-        fridge: state.fridge.filter(obj => obj.id !== action.value.id)
+        fridge: state.fridge.filter(obj => obj.id !== action.value.id),
+        list: state.addToListWhenRemovedFromFridge ? [...state.list, action.value] : state.list
       };
       return nextState || state;
     case 'ADD_TO_LIST':
@@ -30,18 +34,16 @@ function saveIngredients(state = initialState, action) {
         list: state.list.filter(obj => obj.id !== action.value.id)
       };
       return nextState || state;
-    case 'TRANSFER_FROM_LIST_TO_FRIDGE':
+    case 'SWITCH_ADD_TO_LIST_WHEN_REMOVED_FROM_FRIDGE':
       nextState = {
         ...state,
-        list: state.list.filter(obj => obj.id !== action.value.id),
-        fridge: [...state.fridge, action.value]
+        addToListWhenRemovedFromFridge: !state.addToListWhenRemovedFromFridge
       };
       return nextState || state;
-    case 'TRANSFER_FROM_FRIDGE_TO_LIST':
+    case 'SWITCH_REMOVE_FROM_LIST_WHEN_ADDED_TO_FRIDGE':
       nextState = {
         ...state,
-        list: [...state.list, action.value],
-        fridge: state.fridge.filter(obj => obj.id !== action.value.id)
+        removeFromListWhenAddedToFridge: !state.removeFromListWhenAddedToFridge
       };
       return nextState || state;
     case 'CLEAR_DATA':

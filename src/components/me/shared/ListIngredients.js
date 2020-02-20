@@ -13,7 +13,9 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
 
     const _inputSearchStringChanged = (text) => {
         searchString.current = text;
-        onSearchStringUpdate(text);
+        if (onSearchStringUpdate !== null) {
+            onSearchStringUpdate(text);
+        }
     };
 
     const _pressSortByName = () => {

@@ -11,6 +11,7 @@ import Recipe from '../components/recipes/Recipe';
 import MyFridge from '../components/me/MyFridge';
 import MyList from '../components/me/MyList';
 import MyRecipes from '../components/me/MyRecipes';
+import AddIngredient from '../components/me/shared/AddIngredient';
 
 const SearchNavigation = createStackNavigator(
     {
@@ -43,7 +44,13 @@ const MeNavigation = createStackNavigator(
                 title: 'My recipes'
             },
         },
-        Recipe: Recipe
+        Recipe: Recipe,
+        AddIngredient: {
+            screen: AddIngredient,
+            navigationOptions: {
+                title: 'Add ingredient'
+            },
+        },
     },
     {
         initialRouteName: 'Me',

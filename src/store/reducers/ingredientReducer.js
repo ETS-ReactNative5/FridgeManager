@@ -7,11 +7,14 @@ const initialState = {
 
 function saveIngredients(state = initialState, action) {
   let nextState;
+  const isInList = () => state.list.findIndex(obj => obj.id === action.value.id) !== -1;
+  const isInFridge = () => state.fridge.findIndex(obj => obj.id === action.value.id) !== -1;
+
   switch (action.type) {
     case 'ADD_TO_FRIDGE':
       nextState = {
         ...state,
-        fridge: [...state.fridge, action.value],
+        fridge: isInFridge() ? state.fridge : [...state.fridge, action.value],
         list: state.removeFromListWhenAddedToFridge ? state.list.filter(obj => obj.id !== action.value.id) : state.list
       };
       return nextState || state;
@@ -19,13 +22,13 @@ function saveIngredients(state = initialState, action) {
       nextState = {
         ...state,
         fridge: state.fridge.filter(obj => obj.id !== action.value.id),
-        list: state.addToListWhenRemovedFromFridge ? [...state.list, action.value] : state.list
+        list: state.addToListWhenRemovedFromFridge && !isInList() ? [...state.list, action.value] : state.list
       };
       return nextState || state;
     case 'ADD_TO_LIST':
       nextState = {
         ...state,
-        list: [...state.list, action.value]
+        list: isInList() ? state.list : [...state.list, action.value]
       };
       return nextState || state;
     case 'REMOVE_FROM_LIST':

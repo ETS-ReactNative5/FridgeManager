@@ -56,6 +56,10 @@ export function getRecipeImageUri(imgName) {
     return `${WEB_URL}/recipeImages/${imgName}`;
 }
 
+export function getIngredientImageUri(imgName) {
+    return `${WEB_URL}/cdn/ingredients_100x100/${imgName}`;
+}
+
 export async function get(url) {
     const response = await fetch(url);
 

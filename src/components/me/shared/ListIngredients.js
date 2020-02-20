@@ -3,8 +3,9 @@ import {FlatList, StyleSheet, Text, TextInput, View} from 'react-native';
 import { connect } from 'react-redux';
 import {CheckBox} from 'react-native-elements';
 import {colors} from '../../../definitions/colors';
+import IngredientItem from './IngredientItem';
 
-const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onSearchStringUpdate, source, fridge, list }) => {
+const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onSearchStringUpdate, source, destination, canDelete, fridge, list }) => {
 
     const searchString = useRef("");
     const [sortByName, setSortByName] = useState(true);
@@ -25,16 +26,6 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
         const newState = !sortByAisle;
         setSortByAisle(newState);
         setSortByName(!newState);
-    };
-
-    const _isInFridge = (ingredientID) => {
-        return fridge.findIndex(obj => obj.id === ingredientID) !== -1;
-
-    };
-
-    const _isInList = (ingredientID) => {
-        return list.findIndex(obj => obj.id === ingredientID) !== -1;
-
     };
     
     return (
@@ -79,9 +70,16 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
                 style={ styles.listIngredients }
                 contentContainerStyle={{ paddingBottom:15 }}
                 data={ ingredients }
-                keyExtractor={ (item) => item.id }
+                keyExtractor={ (item) => item.id.toString() }
                 extraData={ [fridge, list] }
-                renderItem={ ({item}) => <Text>{item.name}</Text> }
+                renderItem={ ({item}) =>
+                    <IngredientItem
+                        ingredient={ item }
+                        source={ source }
+                        destination={ destination }
+                        canDelete={ canDelete }
+                    />
+                }
                 onRefresh={ refreshIngredients }
                 refreshing={ refreshingState }
                 onEndReachedThreshold={ 0.5 }
@@ -107,7 +105,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         paddingTop: 5,
-        marginBottom: 5
+        marginBottom: 10
     },
     row: {
         flexDirection: 'row',
@@ -138,6 +136,7 @@ const styles = StyleSheet.create({
         padding: 0
     },
     radioButtonText: {
+        fontWeight: 'normal',
         marginLeft: 0,
         marginRight: 0,
     },

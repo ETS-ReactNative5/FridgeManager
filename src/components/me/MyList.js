@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Keyboard} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import ListIngredients from './shared/ListIngredients';
 import {connect} from 'react-redux';
 import {Button, Icon} from 'react-native-elements';
@@ -8,7 +8,7 @@ import {colors} from '../../definitions/colors';
 const MyList = ({list, navigation}) => {
 
     const _navigateToAddIngredient = () => {
-        navigation.navigate("AddIngredient");
+        navigation.navigate("AddIngredient", { destination: 'list' });
     };
 
     return (
@@ -18,6 +18,8 @@ const MyList = ({list, navigation}) => {
                 refreshingState={ false }
                 refreshIngredients={ null }
                 source="list"
+                destination="fridge"
+                canDelete={ true }
             />
             <Button
                 title="Add new ingredient"

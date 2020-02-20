@@ -6,7 +6,7 @@ import {Button, Icon} from 'react-native-elements';
 import {colors} from '../../../definitions/colors';
 import {ingredientsAutocomplete, searchRecipes} from '../../../api/spoonacular';
 
-const AddIngredient = ({ initialSearchString, initialOrderByName, initialOrderByAisle }) => {
+const AddIngredient = ({ initialSearchString, initialOrderByName, initialOrderByAisle, navigation }) => {
     const searchString = useRef(initialSearchString);
     const [ingredients, setIngredients] = useState([]);
     const [isRefreshing, setRefreshingState] = useState( false );
@@ -38,6 +38,9 @@ const AddIngredient = ({ initialSearchString, initialOrderByName, initialOrderBy
                 refreshingState={ isRefreshing }
                 refreshIngredients={ _searchIngredients }
                 onSearchStringUpdate={ (val) => _onSearchStringUpdate(val)}
+                source={ null }
+                destination={ navigation.getParam('destination') }
+                canDelete={ false }
             />
         </View>
     );

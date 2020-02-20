@@ -33,14 +33,14 @@ const Settings = ({settings, dispatch}) => {
     const _displayApiInfo = () => {
         const apiCredits = !!settings.apiCredits ? settings.apiCredits : 'never checked';
         let apiInfoJSX = [
-            <View style={ styles.apiLineView }>
+            <View style={ styles.apiLineView } key="api-credits">
                 <Text>API credits remaining: </Text>
                 <Text style={{ fontWeight: 'bold'}}>{ apiCredits }</Text>
             </View>
         ];
         if (!!settings.lastUpdate) {
             apiInfoJSX.push(
-                <View style={ styles.apiLineView }>
+                <View style={ styles.apiLineView } key="last-update">
                     <Text>Last update: </Text>
                     <Text style={{ fontWeight: 'bold'}}>{ settings.lastUpdate }</Text>
                 </View>

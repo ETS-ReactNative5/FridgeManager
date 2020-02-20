@@ -1,43 +1,43 @@
 import React, {useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import IngredientFilter from './IngredientFilter';
 import ListIngredients from './ListIngredients';
 import {connect} from 'react-redux';
 import {Button, Icon} from 'react-native-elements';
 import {colors} from '../../../definitions/colors';
+import {ingredientsAutocomplete, searchRecipes} from '../../../api/spoonacular';
 
 const AddIngredient = ({ initialSearchString, initialOrderByName, initialOrderByAisle }) => {
     const searchString = useRef(initialSearchString);
-    const [sortByName, setSortByName] = useState(initialOrderByName);
-    const [sortByAisle, setSortByAisle] = useState(initialOrderByAisle);
     const [ingredients, setIngredients] = useState([]);
     const [isRefreshing, setRefreshingState] = useState( false );
     const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
 
+    const _searchIngredients = async () => {
+        setRefreshingState( true );
+        setErrorDataLoading( false );
+        try {
+            let apiResult = (await ingredientsAutocomplete(searchString.current));
+            setIngredients(apiResult);
+        } catch (error) {
+            setIngredients([]);
+            setErrorDataLoading( true );
+        } finally {
+            setRefreshingState( false );
+        }
+    };
+
+    const _onSearchStringUpdate = async (val) => {
+        searchString.current = val;
+        await _searchIngredients();
+    };
+
     return (
         <View style={ styles.mainView }>
-            <IngredientFilter
-                onSortByName={ (val) => setSortByName(val)}
-                onSortByAisle={ (val) => setSortByAisle(val)}
-                onSearchStringUpdate={ (val) => searchString.current = val}
-            />
             <ListIngredients
                 ingredients={ ingredients }
                 refreshingState={ isRefreshing }
                 refreshIngredients={ _searchIngredients }
-            />
-            <Button
-                title="Add new ingredient"
-                icon={
-                    <Icon
-                        type="material"
-                        name="add"
-                        size={20}
-                        color="white"
-                    />
-                }
-                color={ colors.primary }
-                buttonStyle={ styles.addIngredientButton}
+                onSearchStringUpdate={ (val) => _onSearchStringUpdate(val)}
             />
         </View>
     );

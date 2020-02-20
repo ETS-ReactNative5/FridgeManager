@@ -41,7 +41,7 @@ export async function getRecipeInformation(id) {
 
 export async function ingredientsAutocomplete(searchString) {
     try {
-        return get(`${ API_URL }/food/ingredients/autocomplete?query=${ searchString }&number=${ AUTOCOMPLETE_RESULTS }&apiKey=${ API_KEY }`)
+        return get(`${ API_URL }/food/ingredients/autocomplete?query=${ searchString }&number=${ AUTOCOMPLETE_RESULTS }&metaInformation=true&apiKey=${ API_KEY }`)
     } catch (error) {
         console.log('Error with function ingredientsAutocomplete ' + error.message);
         throw error;

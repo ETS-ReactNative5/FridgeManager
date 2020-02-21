@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
+import { Image, StyleSheet, Text, View} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import { getIngredientImageUri } from '../../../api/spoonacular';
 import { colors } from '../../../definitions/colors';
@@ -107,6 +107,9 @@ const IngredientItem = ({ ingredient, source, destination, canDelete, list, frid
                 <Text style={ styles.ingredientNameText }>
                     { ingredient.name.charAt(0).toUpperCase() + ingredient.name.substr(1)}
                 </Text>
+                <Text style={ styles.ingredientAisleText }>
+                    { ingredient.aisle.split(';').join(', ') }
+                </Text>
             </View>
             <View style={ styles.buttonsView }>
                 { _displayAddTo() }
@@ -160,6 +163,10 @@ const styles = StyleSheet.create({
     ingredientNameText: {
         fontWeight: 'bold',
         fontSize: 17
+    },
+    ingredientAisleText: {
+        fontStyle: 'italic',
+        fontSize: 13
     },
     icon: {
         padding: 8,

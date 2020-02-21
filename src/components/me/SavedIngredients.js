@@ -1,25 +1,34 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ListIngredients from './shared/ListIngredients';
-import {connect} from 'react-redux';
-import {Button, Icon} from 'react-native-elements';
-import {colors} from '../../definitions/colors';
+import { connect } from 'react-redux';
+import { Button, Icon } from 'react-native-elements';
+import { colors } from '../../definitions/colors';
 
-const MyList = ({list, navigation}) => {
+/**
+ * Component that handles both MyFridge and MyList depending on the source and destination props
+ *
+ * @param fridge contains all the ingredients stored in the fridge
+ * @param list contains all the ingredients stored in the shopping list
+ * @param navigation
+ * @param source: 'fridge'|'list' indicates whether the data comes from the fridge or the shopping list
+ * @param destination: 'fridge'|'list' indicates whether the data should be sent when clicking on save buttons
+ */
+const SavedIngredients = ({ fridge, list, navigation, source, destination }) => {
 
     const _navigateToAddIngredient = () => {
-        navigation.navigate("AddIngredient", { destination: 'list' });
+        navigation.navigate("AddIngredient", { destination: source }); // The destination for AddIngredient is the source for SavedIngredients
     };
 
     return (
         <View style={ styles.mainView }>
             <ListIngredients
-                ingredients={ list }
+                ingredients={ source === 'fridge' ? fridge : list }
                 refreshingState={ false }
                 refreshIngredients={ null }
                 onSearchStringUpdate={ null }
-                source="list"
-                destination="fridge"
+                source={ source }
+                destination={ destination }
                 canDelete={ true }
             />
             <Button
@@ -42,11 +51,12 @@ const MyList = ({list, navigation}) => {
 
 const mapStateToProps = (state) => {
     return {
+        fridge: state.ingredientReducer.fridge,
         list: state.ingredientReducer.list
     }
 };
 
-export default connect(mapStateToProps)(MyList);
+export default connect(mapStateToProps)(SavedIngredients);
 
 const styles = StyleSheet.create({
     mainView: {

@@ -7,12 +7,12 @@ import IngredientItem from './IngredientItem';
 
 const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onSearchStringUpdate, source, destination, canDelete, fridge, list }) => {
 
-    const searchString = useRef("");
+    const [searchString, setSearchString] = useState('');
     const [sortByName, setSortByName] = useState(true);
     const [sortByAisle, setSortByAisle] = useState(false);
 
     const _inputSearchStringChanged = (text) => {
-        searchString.current = text;
+        setSearchString(text);
         if (onSearchStringUpdate !== null) {
             onSearchStringUpdate(text);
         }
@@ -28,6 +28,19 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
         const newState = !sortByAisle;
         setSortByAisle(newState);
         setSortByName(!newState);
+    };
+
+
+    const _filteredIngredients = () => {
+        return onSearchStringUpdate === null ? ingredients.filter(ingredient => ingredient.name.includes(searchString.toLowerCase())) : ingredients;
+    };
+
+    const _sortedIngredients = () => {
+        if (sortByName) {
+            return _filteredIngredients().sort((a, b) => a.name.localeCompare(b.name, 'en-US'));
+        } else if (sortByAisle) {
+            return _filteredIngredients().sort((a, b) => a.aisle.localeCompare(b.aisle, 'en-US'));
+        }
     };
     
     return (
@@ -71,7 +84,7 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
             <FlatList
                 style={ styles.listIngredients }
                 contentContainerStyle={{ paddingBottom:15 }}
-                data={ ingredients }
+                data={ _sortedIngredients() }
                 keyExtractor={ (item) => item.id.toString() }
                 extraData={ [fridge, list] }
                 renderItem={ ({item}) =>

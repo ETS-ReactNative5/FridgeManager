@@ -8,10 +8,9 @@ import Search from '../components/recipes/Search';
 import Me from '../components/me/Me';
 import Settings from '../components/settings/Settings';
 import Recipe from '../components/recipes/Recipe';
-import MyFridge from '../components/me/MyFridge';
-import MyList from '../components/me/MyList';
 import MyRecipes from '../components/me/MyRecipes';
 import AddIngredient from '../components/me/shared/AddIngredient';
+import SavedIngredients from '../components/me/SavedIngredients';
 
 const SearchNavigation = createStackNavigator(
     {
@@ -27,13 +26,13 @@ const MeNavigation = createStackNavigator(
     {
         Me: Me,
         MyFridge: {
-            screen: MyFridge,
+            screen: props => <SavedIngredients {...props} source="fridge" destination="list"/>,
             navigationOptions: {
                 title: 'My fridge'
             },
         },
         MyList: {
-            screen: MyList,
+            screen: props => <SavedIngredients {...props} source="list" destination="fridge"/>,
             navigationOptions: {
                 title: 'My list'
             },

@@ -49,6 +49,7 @@ export async function ingredientsAutocomplete(searchString) {
 }
 
 export function getRecipeImageUri(imgName) {
+
     // If imgName is already an Uri, don't do anything to it
     if (imgName.match(/^http(s?):\/\/.*/)) {
         return imgName;

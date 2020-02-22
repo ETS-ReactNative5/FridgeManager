@@ -20,3 +20,4 @@ jobs:
           expo-cache: true
       - run: yarn install
       - run: expo publish
+      - run: expo build:android -t apk

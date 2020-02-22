@@ -21,6 +21,7 @@ const RecipeItem = ({ isSaved, showSavedIcon, recipe, onClickOnMe }) => {
         <TouchableOpacity onPress={ () => onClickOnMe(recipe.id) }>
             <Card
                 image={{ uri: getRecipeImageUri(recipe.image) }}
+                containerStyle={ styles.cardContainerStyle }
             >
                 <View style={ styles.cardContentView }>
                     <View style={ styles.cardContentBordersView } />
@@ -61,5 +62,12 @@ const styles = StyleSheet.create({
     },
     cardContentCenterView: {
         flex: 8,
+    },
+    cardContainerStyle: {
+        borderTopWidth: 0,
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+        borderBottomWidth : 1.0,
+        borderColor: colors.primary
     }
 });

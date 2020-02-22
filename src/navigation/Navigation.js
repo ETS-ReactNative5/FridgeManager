@@ -4,13 +4,13 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import React from 'react';
 import {Ionicons} from '@expo/vector-icons';
 import {colors} from '../definitions/colors';
-import Search from '../components/search/Search';
-import Me from '../components/me/Me';
-import Settings from '../components/settings/Settings';
-import Recipe from '../components/shared/Recipe';
-import MyFridge from '../components/me/MyFridge';
-import MyList from '../components/me/MyList';
-import MyRecipes from '../components/me/MyRecipes';
+import Search from '../components/Search';
+import Me from '../components/Me';
+import Settings from '../components/Settings';
+import Recipe from '../components/recipes/Recipe';
+import MyRecipes from '../components/recipes/MyRecipes';
+import AddIngredient from '../components/ingredients/AddIngredient';
+import SavedIngredients from '../components/ingredients/SavedIngredients';
 
 const SearchNavigation = createStackNavigator(
     {
@@ -25,10 +25,37 @@ const SearchNavigation = createStackNavigator(
 const MeNavigation = createStackNavigator(
     {
         Me: Me,
-        MyFridge: MyFridge,
-        MyList: MyList,
-        MyRecipes: MyRecipes,
-        Recipe: Recipe
+        MyFridge: {
+            screen: props => <SavedIngredients {...props} source="fridge" destination="list"/>,
+            navigationOptions: {
+                title: 'My fridge'
+            },
+        },
+        MyList: {
+            screen: props => <SavedIngredients {...props} source="list" destination="fridge"/>,
+            navigationOptions: {
+                title: 'My list'
+            },
+        },
+        MyRecipes: {
+            screen: MyRecipes,
+            navigationOptions: {
+                title: 'My recipes'
+            },
+        },
+        Recipe: Recipe,
+        AddIngredientToMyList: {
+            screen: props => <AddIngredient {...props} destination="list"/>,
+            navigationOptions: {
+                title: 'Add to list'
+            },
+        },
+        AddIngredientToMyFridge: {
+            screen: props => <AddIngredient {...props} destination="fridge"/>,
+            navigationOptions: {
+                title: 'Add to fridge'
+            },
+        },
     },
     {
         initialRouteName: 'Me',

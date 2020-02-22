@@ -4,12 +4,14 @@ const API_KEY = 'fbc1dcbaa05443b1a6383a0b96c077e7';
 const API_URL = 'https://api.spoonacular.com';
 const WEB_URL = 'https://spoonacular.com';
 const API_CREDITS_PER_DAY = 150;
+const AUTOCOMPLETE_RESULTS = 25;
+const RECIPES_BY_INGREDIENTS_RESULTS = 25;
 
-export async function searchRecipes(searchTerm, cuisine, diet, offset) {
+export async function searchRecipes(searchString, cuisine, diet, offset) {
     try {
         let url = `${ API_URL }/recipes/search?apiKey=${ API_KEY }`;
-        if (!!searchTerm) {
-            url = `${ url }&query=${ searchTerm }`
+        if (!!searchString) {
+            url = `${ url }&query=${ searchString }`
         }
         if (!!cuisine) {
             url = `${ url }&cuisine=${ cuisine }`
@@ -32,19 +34,41 @@ export async function searchRecipes(searchTerm, cuisine, diet, offset) {
 export async function getRecipeInformation(id) {
     try {
         return get(`${ API_URL }/recipes/${id}/information?apiKey=${ API_KEY }`)
-
     } catch (error) {
         console.log('Error with function getRecipeInformation ' + error.message);
         throw error;
     }
 }
 
+export async function getRecipeByIngredients(ingredients) {
+    try {
+        ingredients = ingredients.map(ingredient => ingredient.name).join(',');
+        return get(`${ API_URL }/recipes/findByIngredients?ingredients=${ingredients}&number=${RECIPES_BY_INGREDIENTS_RESULTS}&ignorePantry=true&apiKey=${ API_KEY }`)
+    } catch (error) {
+        console.log('Error with function getRecipeByIngredients ' + error.message);
+        throw error;
+    }
+}
+
+export async function ingredientsAutocomplete(searchString) {
+    try {
+        return get(`${ API_URL }/food/ingredients/autocomplete?query=${ searchString }&number=${ AUTOCOMPLETE_RESULTS }&metaInformation=true&apiKey=${ API_KEY }`)
+    } catch (error) {
+        console.log('Error with function ingredientsAutocomplete ' + error.message);
+        throw error;
+    }
+}
+
 export function getRecipeImageUri(imgName) {
     // If imgName is already an Uri, don't do anything to it
-    if (imgName.match(/^http(s?):\/\/.*/)) {
+    if (!!imgName && imgName.match(/^http(s?):\/\/.*/)) {
         return imgName;
     }
     return `${WEB_URL}/recipeImages/${imgName}`;
+}
+
+export function getIngredientImageUri(imgName) {
+    return `${WEB_URL}/cdn/ingredients_100x100/${imgName}`;
 }
 
 export async function get(url) {

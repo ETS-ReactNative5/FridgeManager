@@ -1,13 +1,11 @@
 {
   "expo": {
-    "name": "Blank Template",
-    "slug": "FridgeManager",
+    "name": "Fridge Manager",
+    "slug": "fridge-manager",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
-      "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,8 +21,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
+    "android": {
+      "package": "fr.gilleshz.fridgemanager",
+      "versionCode": 1
     }
   }
 }

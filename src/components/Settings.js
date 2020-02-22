@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, CheckBox, TouchableOpacity, StyleSheet, Alert, ActivityIndicator} from 'react-native';
+import {View, Text, CheckBox, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {colors} from '../../definitions/colors';
+import {colors} from '../definitions/colors';
 import { connect } from 'react-redux';
 
-const Settings = ({settings, dispatch}) => {
+const Settings = ({apiInfo, ingredients, dispatch}) => {
 
     const _confirmClearData = () => {
         Alert.alert(
@@ -30,23 +30,25 @@ const Settings = ({settings, dispatch}) => {
         dispatch( { type: 'SWITCH_REMOVE_FROM_LIST_WHEN_ADDED_TO_FRIDGE' });
     };
 
-    const _displayApiInfo = () => {
-        const apiCredits = !!settings.apiCredits ? settings.apiCredits : 'never checked';
-        let apiInfoJSX = [
-            <View style={ styles.apiLineView }>
+    const _displayApiCredits= () => {
+        const apiCredits = !!apiInfo.apiCredits ? Math.round(apiInfo.apiCredits * 100) / 100 : 'never checked';
+        return (
+            <View style={ styles.apiLineView } key="api-credits">
                 <Text>API credits remaining: </Text>
                 <Text style={{ fontWeight: 'bold'}}>{ apiCredits }</Text>
             </View>
-        ];
-        if (!!settings.lastUpdate) {
-            apiInfoJSX.push(
-                <View style={ styles.apiLineView }>
+        );
+    };
+
+    const _displayApiLastUpdate = () => {
+        if (!!apiInfo.lastUpdate) {
+            return (
+                <View style={ styles.apiLineView } key="last-update">
                     <Text>Last update: </Text>
-                    <Text style={{ fontWeight: 'bold'}}>{ settings.lastUpdate }</Text>
+                    <Text style={{ fontWeight: 'bold'}}>{ apiInfo.lastUpdate }</Text>
                 </View>
-            )
+            );
         }
-        return apiInfoJSX;
     };
 
     return (
@@ -56,7 +58,7 @@ const Settings = ({settings, dispatch}) => {
                 <View style={ styles.configLineView }>
                     <View style={ styles.configCheckBoxView }>
                         <CheckBox
-                            value={settings.addToListWhenRemovedFromFridge}
+                            value={ingredients.addToListWhenRemovedFromFridge}
                             onValueChange={ _switchAddToListWhenRemovedFromFridge }
                         />
                     </View>
@@ -65,7 +67,7 @@ const Settings = ({settings, dispatch}) => {
                 <View style={ styles.configLineView }>
                     <View style={ styles.configCheckBoxView }>
                         <CheckBox
-                            value={settings.removeFromListWhenAddedToFridge}
+                            value={ingredients.removeFromListWhenAddedToFridge}
                             onValueChange={ _switchRemoveFromListWhenAddedToFridge }
                         />
                     </View>
@@ -74,7 +76,8 @@ const Settings = ({settings, dispatch}) => {
             </View>
             <View style={ styles.apiView }>
                 <Text style={ styles.titleText }>API</Text>
-                { _displayApiInfo() }
+                { _displayApiCredits() }
+                { _displayApiLastUpdate() }
             </View>
             <View style={ styles.clearDataView }>
                 <TouchableOpacity
@@ -91,7 +94,8 @@ const Settings = ({settings, dispatch}) => {
 
 const mapStateToProps = (state) => {
     return {
-        settings: state.settingsReducer
+        apiInfo: state.apiInfoReducer,
+        ingredients: state.ingredientReducer
     }
 };
 

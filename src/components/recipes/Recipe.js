@@ -6,17 +6,16 @@ import {
     ActivityIndicator,
     ScrollView,
     Image,
-    TouchableOpacity,
-    FlatList,
-    SafeAreaView
+    TouchableOpacity, Alert,
 } from 'react-native';
 import { getRecipeInformation } from '../../api/spoonacular';
 import { connect } from 'react-redux';
 import { colors } from '../../definitions/colors';
 import { assets } from '../../definitions/assets';
-import recipeReducer from '../../store/reducers/recipeReducer';
+import RecipeIngredientItem from './RecipeIngredientItem';
+import {Button, Icon} from 'react-native-elements';
 
-const Recipe = ( {navigation, myRecipes, dispatch} ) => {
+const Recipe = ( {navigation, myRecipes, fridge, list, dispatch} ) => {
     const [isLoading, setLoadingState] = useState( true );
     const [recipeData, setRecipeData] = useState( null );
 
@@ -29,7 +28,12 @@ const Recipe = ( {navigation, myRecipes, dispatch} ) => {
             setRecipeData( await getRecipeInformation(navigation.getParam('recipeID')) );
             setLoadingState( false );
         } catch (error) {
-            //Do
+            Alert.alert(
+                `Error ${error.message}`,
+                 'An error has occurred while fetching the recipe. Please try again later.',
+                [{ text: 'OK' }]
+            );
+            navigation.goBack();
         }
     };
 
@@ -108,6 +112,91 @@ const Recipe = ( {navigation, myRecipes, dispatch} ) => {
             );
         }
         return null;
+    };
+
+    const _inMyFridge = () => {
+        const ingredients = recipeData.extendedIngredients.filter(
+            ingredient => fridge.some(fridgeIngredient => fridgeIngredient.id === ingredient.id)
+        );
+        const inMyFridgeJSX = [];
+
+        ingredients.forEach(
+            (ingredient, index) => inMyFridgeJSX.push(
+                <RecipeIngredientItem key={ 'fridge' + ingredient.id + index } ingredient={ ingredient }/>
+            )
+        );
+
+        return inMyFridgeJSX;
+    };
+
+    const _notInMyFridge = () => {
+        const ingredients = recipeData.extendedIngredients.filter(
+            ingredient => !fridge.some(fridgeIngredient => fridgeIngredient.id === ingredient.id)
+        );
+        const notInMyFridgeJSX = [];
+
+        ingredients.forEach(
+            (ingredient, index) => notInMyFridgeJSX.push(
+                <RecipeIngredientItem key={ 'missing' + ingredient.id + index } ingredient={ ingredient }/>
+            )
+        );
+
+        return notInMyFridgeJSX;
+    };
+
+    const _addAllToMyList = () => {
+        recipeData.extendedIngredients.filter(
+            ingredient => !fridge.some(fridgeIngredient => fridgeIngredient.id === ingredient.id)
+        ).forEach(
+            ingredient => dispatch({ type: 'ADD_TO_LIST', value: ingredient })
+        );
+    };
+
+    const _displayAddAllToMyList = () => {
+        const ingredientsNotInMyListOrMyFridge = recipeData.extendedIngredients.filter(
+            ingredient =>
+                !list.some(listIngredient => listIngredient.id === ingredient.id) &&
+                !fridge.some(fridgeIngredient => fridgeIngredient.id === ingredient.id)
+        );
+
+        if (ingredientsNotInMyListOrMyFridge.length !== 0) {
+            return (
+                <Button
+                    title="Add all to my list"
+                    icon={
+                        <Icon type="ionicon" name="md-cart" size={15} color="white" iconStyle={ styles.icon } />
+                    }
+                    color={ colors.primary }
+                    buttonStyle={ styles.addToMyListButton }
+                    onPress={ _addAllToMyList }
+                />
+            );
+        }
+    };
+
+    const _displayIngredients = () => {
+        return (
+            <View>
+                <Text style={ styles.subTitleText }>
+                    Ingredients
+                </Text>
+                <View style={ styles.ingredientsSplitView }>
+                    <View style={ styles.inMyFridgeView }>
+                        <Text style={ styles.ingredientsSplitTitle }>In my fridge</Text>
+                        <View style={ styles.inMyFridgeListView }>
+                            { _inMyFridge() }
+                        </View>
+                    </View>
+                    <View style={ styles.missingView }>
+                        <Text style={ styles.ingredientsSplitTitle }>Missing</Text>
+                        <View style={ styles.missingListView }>
+                            { _notInMyFridge() }
+                            { _displayAddAllToMyList() }
+                        </View>
+                    </View>
+                </View>
+            </View>
+        );
     };
 
     const _displayInstructions = () => {
@@ -200,16 +289,9 @@ const Recipe = ( {navigation, myRecipes, dispatch} ) => {
                             Ready in { recipeData.readyInMinutes } minutes, up to { recipeData.servings } serving{ recipeData.servings > 1 ? 's' : '' }
                         </Text>
 
-                        <Text style={ styles.subTitleText }>
-                            Ingredients
-                        </Text>
-                        <View>
-                            <Text>TODO</Text>
-                        </View>
-
+                        { _displayIngredients() }
                         { _displayInstructions() }
                         { _displayWinePairing() }
-
                     </View>
                 </ScrollView>
             );
@@ -227,7 +309,9 @@ const Recipe = ( {navigation, myRecipes, dispatch} ) => {
 
 const mapStateToProps = (state) => {
     return {
-        myRecipes: state.recipeReducer.recipes
+        myRecipes: state.recipeReducer.recipes,
+        fridge: state.ingredientReducer.fridge,
+        list: state.ingredientReducer.list
     }
 };
 
@@ -256,8 +340,8 @@ const styles = StyleSheet.create({
     },
     recipeInfoView: {
         flex: 1,
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingLeft: 15,
+        paddingRight: 15,
         paddingTop: 5,
         paddingBottom: 25,
     },
@@ -312,5 +396,41 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: colors.secondary,
         marginBottom: 10
+    },
+    ingredientsSplitView: {
+        flex: 2,
+        flexDirection: 'row'
+    },
+    inMyFridgeView: {
+        flex: 1,
+        borderRightWidth : 1.0,
+        borderColor: colors.secondary,
+    },
+    missingView: {
+        flex: 1
+    },
+    ingredientsSplitTitle: {
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fontSize: 14,
+        color: colors.primary,
+        textAlign: 'center',
+        marginBottom: 10
+    },
+    inMyFridgeListView: {
+        paddingRight: 10
+    },
+    missingListView: {
+        paddingLeft: 10
+    },
+    addToMyListButton: {
+        marginTop: 5,
+        backgroundColor: colors.primary,
+        width: '100%',
+        height: 30
+    },
+    icon: {
+        paddingRight: 5,
+        paddingTop: 2
     }
 });

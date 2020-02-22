@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, CheckBox, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {colors} from '../../definitions/colors';
+import {colors} from '../definitions/colors';
 import { connect } from 'react-redux';
 
 const Settings = ({apiInfo, ingredients, dispatch}) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList, StyleSheet, Text, TextInput, View} from 'react-native';
 import { connect } from 'react-redux';
 import {CheckBox} from 'react-native-elements';
-import {colors} from '../../../definitions/colors';
+import {colors} from '../../definitions/colors';
 import IngredientItem from './IngredientItem';
 
 const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onSearchStringUpdate, source, destination, canDelete, fridge, list, filters, dispatch }) => {

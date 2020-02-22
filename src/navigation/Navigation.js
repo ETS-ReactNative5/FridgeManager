@@ -4,13 +4,13 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import React from 'react';
 import {Ionicons} from '@expo/vector-icons';
 import {colors} from '../definitions/colors';
-import Search from '../components/recipes/Search';
-import Me from '../components/me/Me';
-import Settings from '../components/settings/Settings';
+import Search from '../components/Search';
+import Me from '../components/Me';
+import Settings from '../components/Settings';
 import Recipe from '../components/recipes/Recipe';
-import MyRecipes from '../components/me/MyRecipes';
-import AddIngredient from '../components/me/shared/AddIngredient';
-import SavedIngredients from '../components/me/SavedIngredients';
+import MyRecipes from '../components/recipes/MyRecipes';
+import AddIngredient from '../components/ingredients/AddIngredient';
+import SavedIngredients from '../components/ingredients/SavedIngredients';
 
 const SearchNavigation = createStackNavigator(
     {

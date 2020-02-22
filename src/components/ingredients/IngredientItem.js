@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
-import { getIngredientImageUri } from '../../../api/spoonacular';
-import { colors } from '../../../definitions/colors';
+import { getIngredientImageUri } from '../../api/spoonacular';
+import { colors } from '../../definitions/colors';
 import {connect} from 'react-redux';
 
 const IngredientItem = ({ ingredient, source, destination, canDelete, list, fridge, dispatch }) => {

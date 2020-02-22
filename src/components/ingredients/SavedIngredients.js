@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { View, StyleSheet } from 'react-native';
-import ListIngredients from './shared/ListIngredients';
+import ListIngredients from './ListIngredients';
 import { connect } from 'react-redux';
 import { Button, Icon } from 'react-native-elements';
 import { colors } from '../../definitions/colors';

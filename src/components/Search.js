@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import {View, TextInput, Text, Picker, StyleSheet, Keyboard, FlatList} from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import {colors} from '../../definitions/colors';
-import {getRecipeByIngredients, searchRecipes} from '../../api/spoonacular';
-import ListRecipes from './ListRecipes';
-import {diets} from '../../api/diets';
-import {cuisines} from '../../api/cuisines';
+import {colors} from '../definitions/colors';
+import {getRecipeByIngredients, searchRecipes} from '../api/spoonacular';
+import ListRecipes from './recipes/ListRecipes';
+import {diets} from '../api/diets';
+import {cuisines} from '../api/cuisines';
 import {connect} from 'react-redux';
-import DisplayError from '../shared/Error';
+import DisplayError from './shared/Error';
 
 const Search = ({navigation, fridge}) => {
     const [recipes, setRecipes] = useState([]);

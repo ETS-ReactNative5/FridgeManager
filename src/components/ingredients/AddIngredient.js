@@ -3,9 +3,9 @@ import {View, StyleSheet} from 'react-native';
 import ListIngredients from './ListIngredients';
 import {connect} from 'react-redux';
 import {Button, Icon} from 'react-native-elements';
-import {colors} from '../../../definitions/colors';
-import {ingredientsAutocomplete, searchRecipes} from '../../../api/spoonacular';
-import DisplayError from '../../shared/Error';
+import {colors} from '../../definitions/colors';
+import {ingredientsAutocomplete, searchRecipes} from '../../api/spoonacular';
+import DisplayError from '../shared/Error';
 
 const AddIngredient = ({ initialSearchString, navigation }) => {
     const searchString = useRef(initialSearchString);

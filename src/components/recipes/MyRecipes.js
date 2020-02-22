@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import ListRecipes from '../recipes/ListRecipes';
+import ListRecipes from './ListRecipes';
 import DisplayError from '../shared/Error';
 
 const MyRecipes = ( {myRecipes, navigation} ) => {

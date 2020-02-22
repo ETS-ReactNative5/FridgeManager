@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'src/**'
+      - 'assets/**'
+      - '*.js'
+      - '*.json'
 jobs:
   publish:
     name: Install, publish and build

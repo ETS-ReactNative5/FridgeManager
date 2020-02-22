@@ -2,12 +2,11 @@ import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import ListIngredients from './ListIngredients';
 import {connect} from 'react-redux';
-import {Button, Icon} from 'react-native-elements';
 import {colors} from '../../definitions/colors';
-import {ingredientsAutocomplete, searchRecipes} from '../../api/spoonacular';
+import {ingredientsAutocomplete} from '../../api/spoonacular';
 import DisplayError from '../shared/Error';
 
-const AddIngredient = ({ initialSearchString, navigation }) => {
+const AddIngredient = ({ initialSearchString, destination }) => {
     const searchString = useRef(initialSearchString);
     const [ingredients, setIngredients] = useState([]);
     const [isRefreshing, setRefreshingState] = useState( false );
@@ -49,7 +48,7 @@ const AddIngredient = ({ initialSearchString, navigation }) => {
                     refreshIngredients={ _searchIngredients }
                     onSearchStringUpdate={ (val) => _onSearchStringUpdate(val)}
                     source={ null }
-                    destination={ navigation.getParam('destination') }
+                    destination={ destination }
                     canDelete={ false }
                 />
             )}

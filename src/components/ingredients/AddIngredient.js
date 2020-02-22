@@ -53,7 +53,6 @@ const AddIngredient = ({ initialSearchString, navigation }) => {
                     canDelete={ false }
                 />
             )}
-            <Button title="test" onPress={ () => navigation.setParams({title: 'test'})} />
         </View>
     );
 };

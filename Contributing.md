@@ -37,7 +37,7 @@ In order to help us all figure out what kind of changes have been made in each c
 | New feature                | :sparkles: `:sparkles:`                       |
 | Bugfix                     | :bug: `:bug:`                                 |
 | Fix something on android   | :robot: `:robot:`                             |
-| Fix something on iPhone    | :robot: `:apple:`                             |
+| Fix something on iPhone    | :apple: `:apple:`                             |
 | Documentation              | :books: `:books:`                             |
 | Performance                | :racehorse: `:racehorse:`                     |
 | Tests                      | :rotating_light: `:rotating_light:`           |

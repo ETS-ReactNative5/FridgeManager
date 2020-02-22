@@ -2,29 +2,33 @@ import React, { useState, useRef } from 'react';
 import {View, TextInput, Text, Picker, StyleSheet, Keyboard, FlatList} from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import {colors} from '../../definitions/colors';
-import {searchRecipes} from '../../api/spoonacular';
+import {getRecipeByIngredients, searchRecipes} from '../../api/spoonacular';
 import ListRecipes from './ListRecipes';
 import {diets} from '../../api/diets';
 import {cuisines} from '../../api/cuisines';
+import {connect} from 'react-redux';
+import DisplayError from '../shared/Error';
 
-const Search = ({navigation}) => {
+const Search = ({navigation, fridge}) => {
     const [recipes, setRecipes] = useState([]);
-    const [isRefreshing, setRefreshingState] = useState( false );
-    const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
-    const [diet, setDiet] = useState( '' );
-    const [cuisine, setCuisine] = useState( '' );
-    const searchString = useRef("");
-    const paginationData = useRef( {currentOffset: 0, maxResults: 0} );
+    const [isRefreshing, setRefreshingState] = useState(false);
+    const [isErrorDuringDataLoading, setErrorDataLoading] = useState(false);
+    const [diet, setDiet] = useState('');
+    const [cuisine, setCuisine] = useState('');
+    const [isSearchingByIngredients, setIsSearchingByIngredients] = useState(true);
+    const [searchString, setSearchString] = useState('');
+    const paginationData = useRef({currentOffset: 0, maxResults: 0});
 
     const _inputSearchStringChanged = (text) => {
-        searchString.current = text;
+        setSearchString(text);
     };
 
     const _loadRecipes = async (prevRecipes) => {
         setRefreshingState( true );
         setErrorDataLoading( false );
+        setIsSearchingByIngredients(false);
         try {
-            let apiSearchResult = (await searchRecipes(searchString.current, cuisine, diet, paginationData.current.currentOffset));
+            let apiSearchResult = (await searchRecipes(searchString, cuisine, diet, paginationData.current.currentOffset));
             paginationData.current = { currentOffset: paginationData.current.currentOffset + apiSearchResult.number, maxResults: apiSearchResult.totalResults };
             setRecipes( [...prevRecipes, ...apiSearchResult.results] );
         } catch (error) {
@@ -41,8 +45,31 @@ const Search = ({navigation}) => {
         _loadRecipes([]);
     };
 
+    const _refreshRecipes = () => {
+        isSearchingByIngredients ? _searchRecipesByIngredients() : _searchRecipes();
+    };
+
+    const _searchRecipesByIngredients = async () => {
+        setSearchString('');
+        setDiet('');
+        setCuisine('');
+        setRefreshingState(true);
+        setErrorDataLoading(false);
+        setIsSearchingByIngredients(true);
+        paginationData.current = { currentOffset: 0, maxResults: 0 };
+        try {
+            let apiSearchResult = await getRecipeByIngredients(fridge);
+            setRecipes(apiSearchResult);
+        } catch (error) {
+            setRecipes([]);
+            setErrorDataLoading(true);
+        } finally {
+            setRefreshingState(false);
+        }
+    };
+
     const _loadMoreRecipes = () => {
-        if( paginationData.current.currentOffset < paginationData.current.maxResults ) {
+        if(!isSearchingByIngredients && paginationData.current.currentOffset < paginationData.current.maxResults ) {
             _loadRecipes(recipes);
         }
     };
@@ -60,6 +87,7 @@ const Search = ({navigation}) => {
                         style={ styles.searchField }
                         onChangeText={ text => _inputSearchStringChanged( text ) }
                         onSubmitEditing={ _searchRecipes }
+                        value={ searchString }
                     />
                     <Button
                         icon={
@@ -105,22 +133,33 @@ const Search = ({navigation}) => {
                         color={ colors.primary }
                         buttonStyle={ styles.whatCanICookButton}
                         style={ styles.searchButton }
+                        onPress={ _searchRecipesByIngredients }
                     />
                 </View>
             </View>
-            <ListRecipes
-                recipes={ recipes }
-                showSaveIcon={ true }
-                refreshingState={ isRefreshing }
-                onClickNavigation={ _navigateToRecipeDetails }
-                refreshRecipes={ _searchRecipes }
-                loadMoreRecipes={ _loadMoreRecipes }
-            />
+            { isErrorDuringDataLoading ? (
+                <DisplayError errorMessage='An error has occurred while fetching recipes'/>
+            ) : (
+                <ListRecipes
+                    recipes={ recipes }
+                    showSaveIcon={ true }
+                    refreshingState={ isRefreshing }
+                    onClickNavigation={ _navigateToRecipeDetails }
+                    refreshRecipes={ _refreshRecipes }
+                    loadMoreRecipes={ _loadMoreRecipes }
+                />
+            )}
         </View>
     );
 };
 
-export default Search;
+const mapStateToProps = (state) => {
+    return {
+        fridge: state.ingredientReducer.fridge
+    }
+};
+
+export default connect(mapStateToProps)(Search);
 
 const styles = StyleSheet.create({
     mainView: {

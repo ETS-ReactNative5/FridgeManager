@@ -1,16 +1,23 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import ListIngredients from './ListIngredients';
 import {connect} from 'react-redux';
 import {Button, Icon} from 'react-native-elements';
 import {colors} from '../../../definitions/colors';
 import {ingredientsAutocomplete, searchRecipes} from '../../../api/spoonacular';
+import DisplayError from '../../shared/Error';
 
-const AddIngredient = ({ initialSearchString, initialOrderByName, initialOrderByAisle, navigation }) => {
+const AddIngredient = ({ initialSearchString, navigation }) => {
     const searchString = useRef(initialSearchString);
     const [ingredients, setIngredients] = useState([]);
     const [isRefreshing, setRefreshingState] = useState( false );
     const [isErrorDuringDataLoading, setErrorDataLoading] = useState( false );
+
+    useEffect(() => {
+        if (initialSearchString !== '') {
+            _searchIngredients();
+        }
+    }, []);
 
     const _searchIngredients = async () => {
         setRefreshingState( true );
@@ -33,22 +40,28 @@ const AddIngredient = ({ initialSearchString, initialOrderByName, initialOrderBy
 
     return (
         <View style={ styles.mainView }>
-            <ListIngredients
-                ingredients={ ingredients }
-                refreshingState={ isRefreshing }
-                refreshIngredients={ _searchIngredients }
-                onSearchStringUpdate={ (val) => _onSearchStringUpdate(val)}
-                source={ null }
-                destination={ navigation.getParam('destination') }
-                canDelete={ false }
-            />
+            { isErrorDuringDataLoading ? (
+                <DisplayError errorMessage='An error has occurred while fetching ingredients'/>
+            ) : (
+                <ListIngredients
+                    ingredients={ ingredients }
+                    refreshingState={ isRefreshing }
+                    refreshIngredients={ _searchIngredients }
+                    onSearchStringUpdate={ (val) => _onSearchStringUpdate(val)}
+                    source={ null }
+                    destination={ navigation.getParam('destination') }
+                    canDelete={ false }
+                />
+            )}
+            <Button title="test" onPress={ () => navigation.setParams({title: 'test'})} />
         </View>
     );
 };
 
 const mapStateToProps = (state) => {
     return {
-        list: state.ingredientReducer.list
+        list: state.ingredientReducer.list,
+        initialSearchString: state.ingredientFilterReducer.searchString
     }
 };
 

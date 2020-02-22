@@ -5,6 +5,7 @@ const API_URL = 'https://api.spoonacular.com';
 const WEB_URL = 'https://spoonacular.com';
 const API_CREDITS_PER_DAY = 150;
 const AUTOCOMPLETE_RESULTS = 25;
+const RECIPES_BY_INGREDIENTS_RESULTS = 25;
 
 export async function searchRecipes(searchString, cuisine, diet, offset) {
     try {
@@ -39,6 +40,16 @@ export async function getRecipeInformation(id) {
     }
 }
 
+export async function getRecipeByIngredients(ingredients) {
+    try {
+        ingredients = ingredients.map(ingredient => ingredient.name).join(',');
+        return get(`${ API_URL }/recipes/findByIngredients?ingredients=${ingredients}&number=${RECIPES_BY_INGREDIENTS_RESULTS}&ignorePantry=true&apiKey=${ API_KEY }`)
+    } catch (error) {
+        console.log('Error with function getRecipeByIngredients ' + error.message);
+        throw error;
+    }
+}
+
 export async function ingredientsAutocomplete(searchString) {
     try {
         return get(`${ API_URL }/food/ingredients/autocomplete?query=${ searchString }&number=${ AUTOCOMPLETE_RESULTS }&metaInformation=true&apiKey=${ API_KEY }`)
@@ -49,9 +60,8 @@ export async function ingredientsAutocomplete(searchString) {
 }
 
 export function getRecipeImageUri(imgName) {
-
     // If imgName is already an Uri, don't do anything to it
-    if (imgName.match(/^http(s?):\/\/.*/)) {
+    if (!!imgName && imgName.match(/^http(s?):\/\/.*/)) {
         return imgName;
     }
     return `${WEB_URL}/recipeImages/${imgName}`;

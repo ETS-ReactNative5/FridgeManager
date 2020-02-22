@@ -6,7 +6,7 @@ import {
     ActivityIndicator,
     ScrollView,
     Image,
-    TouchableOpacity,
+    TouchableOpacity, Alert,
 } from 'react-native';
 import { getRecipeInformation } from '../../api/spoonacular';
 import { connect } from 'react-redux';
@@ -28,7 +28,12 @@ const Recipe = ( {navigation, myRecipes, fridge, list, dispatch} ) => {
             setRecipeData( await getRecipeInformation(navigation.getParam('recipeID')) );
             setLoadingState( false );
         } catch (error) {
-            //Do
+            Alert.alert(
+                `Error ${error.message}`,
+                 'An error has occurred while fetching the recipe. Please try again later.',
+                [{ text: 'OK' }]
+            );
+            navigation.goBack();
         }
     };
 
@@ -116,8 +121,8 @@ const Recipe = ( {navigation, myRecipes, fridge, list, dispatch} ) => {
         const inMyFridgeJSX = [];
 
         ingredients.forEach(
-            ingredient => inMyFridgeJSX.push(
-                <RecipeIngredientItem key={ ingredient.id + ingredient.measures.metric.amount } ingredient={ ingredient }/>
+            (ingredient, index) => inMyFridgeJSX.push(
+                <RecipeIngredientItem key={ ingredient.id + index } ingredient={ ingredient }/>
             )
         );
 
@@ -131,8 +136,8 @@ const Recipe = ( {navigation, myRecipes, fridge, list, dispatch} ) => {
         const notInMyFridgeJSX = [];
 
         ingredients.forEach(
-            ingredient => notInMyFridgeJSX.push(
-                <RecipeIngredientItem key={ ingredient.id + ingredient.measures.metric.amount } ingredient={ ingredient }/>
+            (ingredient, index) => notInMyFridgeJSX.push(
+                <RecipeIngredientItem key={ ingredient.id + index } ingredient={ ingredient }/>
             )
         );
 
@@ -140,11 +145,9 @@ const Recipe = ( {navigation, myRecipes, fridge, list, dispatch} ) => {
     };
 
     const _addAllToMyList = () => {
-        const ingredients = recipeData.extendedIngredients.filter(
+        recipeData.extendedIngredients.filter(
             ingredient => !fridge.some(fridgeIngredient => fridgeIngredient.id === ingredient.id)
-        );
-
-        ingredients.forEach(
+        ).forEach(
             ingredient => dispatch({ type: 'ADD_TO_LIST', value: ingredient })
         );
     };

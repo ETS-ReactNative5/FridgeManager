@@ -107,9 +107,12 @@ const IngredientItem = ({ ingredient, source, destination, canDelete, list, frid
                 <Text style={ styles.ingredientNameText }>
                     { ingredient.name.charAt(0).toUpperCase() + ingredient.name.substr(1)}
                 </Text>
-                <Text style={ styles.ingredientAisleText }>
-                    { ingredient.aisle.split(';').join(', ') }
-                </Text>
+                { ingredient.aisle ?
+                    <Text style={ styles.ingredientAisleText }>
+                        { ingredient.aisle.split(';').join(', ') }
+                    </Text>
+                    : null
+                }
             </View>
             <View style={ styles.buttonsView }>
                 { _displayAddTo() }

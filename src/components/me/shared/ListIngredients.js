@@ -1,45 +1,38 @@
-import React, {useRef, useState} from 'react';
+import React from 'react';
 import {FlatList, StyleSheet, Text, TextInput, View} from 'react-native';
 import { connect } from 'react-redux';
 import {CheckBox} from 'react-native-elements';
 import {colors} from '../../../definitions/colors';
 import IngredientItem from './IngredientItem';
 
-const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onSearchStringUpdate, source, destination, canDelete, fridge, list }) => {
-
-    const [searchString, setSearchString] = useState('');
-    const [sortByName, setSortByName] = useState(true);
-    const [sortByAisle, setSortByAisle] = useState(false);
+const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onSearchStringUpdate, source, destination, canDelete, fridge, list, filters, dispatch }) => {
 
     const _inputSearchStringChanged = (text) => {
-        setSearchString(text);
+        dispatch({ type: 'SET_SEARCH_STRING', value: text });
+
         if (onSearchStringUpdate !== null) {
             onSearchStringUpdate(text);
         }
     };
 
     const _pressSortByName = () => {
-        const newState = !sortByName;
-        setSortByName(newState);
-        setSortByAisle(!newState);
+        dispatch({ type: 'SORT_BY_NAME' });
     };
 
     const _pressSortByAisle = () => {
-        const newState = !sortByAisle;
-        setSortByAisle(newState);
-        setSortByName(!newState);
+        dispatch({ type: 'SORT_BY_AISLE' });
     };
 
 
     const _filteredIngredients = () => {
-        return onSearchStringUpdate === null ? ingredients.filter(ingredient => ingredient.name.includes(searchString.toLowerCase())) : ingredients;
+        return onSearchStringUpdate === null ? ingredients.filter(ingredient => ingredient.name.includes(filters.searchString.toLowerCase())) : ingredients;
     };
 
     const _sortedIngredients = () => {
-        if (sortByName) {
+        if (filters.sortByName) {
             return _filteredIngredients().sort((a, b) => a.name.localeCompare(b.name, 'en-US'));
-        } else if (sortByAisle) {
-            return _filteredIngredients().sort((a, b) => a.aisle.localeCompare(b.aisle, 'en-US'));
+        } else if (filters.sortByAisle) {
+            return _filteredIngredients().sort((a, b) => a.aisle ? a.aisle.localeCompare(b.aisle, 'en-US') : -1);
         }
     };
     
@@ -50,6 +43,7 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
                     <TextInput
                         placeholder='Ingredient name'
                         style={ styles.searchField }
+                        value={ filters.searchString }
                         onChangeText={ text => _inputSearchStringChanged(text) }
                     />
                 </View>
@@ -59,8 +53,8 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
                         title='Name'
                         checkedIcon='dot-circle-o'
                         uncheckedIcon='circle-o'
-                        checked={sortByName}
-                        onPress={_pressSortByName}
+                        checked={ filters.sortByName }
+                        onPress={ _pressSortByName }
                         containerStyle={ styles.radioButton }
                         textStyle={ styles.radioButtonText }
                         checkedColor={ colors.secondary }
@@ -71,8 +65,8 @@ const ListIngredients = ({ ingredients, refreshingState, refreshIngredients, onS
                         title='Aisle'
                         checkedIcon='dot-circle-o'
                         uncheckedIcon='circle-o'
-                        checked={sortByAisle}
-                        onPress={_pressSortByAisle}
+                        checked={ filters.sortByAisle }
+                        onPress={ _pressSortByAisle }
                         containerStyle={ styles.radioButton }
                         textStyle={ styles.radioButtonText }
                         checkedColor={ colors.secondary }
@@ -107,6 +101,7 @@ const mapStateToProps = (state) => {
     return {
         fridge: state.ingredientReducer.fridge,
         list: state.ingredientReducer.list,
+        filters: state.ingredientFilterReducer
     }
 };
 

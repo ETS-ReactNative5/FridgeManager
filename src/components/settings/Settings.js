@@ -30,23 +30,25 @@ const Settings = ({apiInfo, ingredients, dispatch}) => {
         dispatch( { type: 'SWITCH_REMOVE_FROM_LIST_WHEN_ADDED_TO_FRIDGE' });
     };
 
-    const _displayApiInfo = () => {
-        const apiCredits = !!apiInfo.apiCredits ? apiInfo.apiCredits : 'never checked';
-        let apiInfoJSX = [
+    const _displayApiCredits= () => {
+        const apiCredits = !!apiInfo.apiCredits ? Math.round(apiInfo.apiCredits * 100) / 100 : 'never checked';
+        return (
             <View style={ styles.apiLineView } key="api-credits">
                 <Text>API credits remaining: </Text>
                 <Text style={{ fontWeight: 'bold'}}>{ apiCredits }</Text>
             </View>
-        ];
+        );
+    };
+
+    const _displayApiLastUpdate = () => {
         if (!!apiInfo.lastUpdate) {
-            apiInfoJSX.push(
+            return (
                 <View style={ styles.apiLineView } key="last-update">
                     <Text>Last update: </Text>
                     <Text style={{ fontWeight: 'bold'}}>{ apiInfo.lastUpdate }</Text>
                 </View>
-            )
+            );
         }
-        return apiInfoJSX;
     };
 
     return (
@@ -74,7 +76,8 @@ const Settings = ({apiInfo, ingredients, dispatch}) => {
             </View>
             <View style={ styles.apiView }>
                 <Text style={ styles.titleText }>API</Text>
-                { _displayApiInfo() }
+                { _displayApiCredits() }
+                { _displayApiLastUpdate() }
             </View>
             <View style={ styles.clearDataView }>
                 <TouchableOpacity

@@ -44,10 +44,16 @@ const MeNavigation = createStackNavigator(
             },
         },
         Recipe: Recipe,
-        AddIngredient: {
-            screen: AddIngredient,
+        AddIngredientToMyList: {
+            screen: props => <AddIngredient {...props} destination="list"/>,
             navigationOptions: {
-                title: 'Add ingredient'
+                title: 'Add to list'
+            },
+        },
+        AddIngredientToMyFridge: {
+            screen: props => <AddIngredient {...props} destination="fridge"/>,
+            navigationOptions: {
+                title: 'Add to fridge'
             },
         },
     },

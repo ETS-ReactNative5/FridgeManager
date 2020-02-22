@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, StyleSheet } from 'react-native';
 import ListIngredients from './shared/ListIngredients';
 import { connect } from 'react-redux';
@@ -13,11 +13,17 @@ import { colors } from '../../definitions/colors';
  * @param navigation
  * @param source: 'fridge'|'list' indicates whether the data comes from the fridge or the shopping list
  * @param destination: 'fridge'|'list' indicates whether the data should be sent when clicking on save buttons
+ * @param dispatch
  */
-const SavedIngredients = ({ fridge, list, navigation, source, destination }) => {
+const SavedIngredients = ({ fridge, list, navigation, source, destination, dispatch }) => {
+
+    useEffect(() => {
+        dispatch({ type: 'CLEAR_FILTER' });
+    }, []);
 
     const _navigateToAddIngredient = () => {
-        navigation.navigate("AddIngredient", { destination: source }); // The destination for AddIngredient is the source for SavedIngredients
+        const component = `AddIngredientToMy${source.charAt(0).toUpperCase() + source.substr(1)}`;
+        navigation.navigate(component);
     };
 
     return (

@@ -1,8 +1,12 @@
 # Fridge Manager
 
+[![FridgeManager](assets/icon.png)](https://expo.io/@gilleshz/fridge-manager)
+
 Fridge Manager is a React Native mobile app using the [Spoonacular](https://spoonacular.com/food-api/docs) API.
 
 It has been developed as part of a university project in the second year of my computer science master's degree.
+
+Try this app by clicking [here](https://expo.io/@gilleshz/fridge-manager).
 
 #### Features
 
@@ -63,6 +67,14 @@ In the project directory run:
 ```shell
 expo build:android -t apk
 ```
+
+## GitHub actions
+
+The GitHub action [Expo Publish](.github/workflows/expo.yml) runs whenever a source file is updated in the `master` branch.
+Which includes the `assets` directory, the `src` directory and all `.js` and `.json` files at the root of the project.
+
+This action publishes the app on [expo.io](https://expo.io/@gilleshz/fridge-manager), and also builds an APK.
+The latest APK being available in the `android` directory.
 
 ## Contributing
 

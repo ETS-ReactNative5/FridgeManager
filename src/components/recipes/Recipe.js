@@ -122,7 +122,7 @@ const Recipe = ( {navigation, myRecipes, fridge, list, dispatch} ) => {
 
         ingredients.forEach(
             (ingredient, index) => inMyFridgeJSX.push(
-                <RecipeIngredientItem key={ ingredient.id + index } ingredient={ ingredient }/>
+                <RecipeIngredientItem key={ 'fridge' + ingredient.id + index } ingredient={ ingredient }/>
             )
         );
 
@@ -137,7 +137,7 @@ const Recipe = ( {navigation, myRecipes, fridge, list, dispatch} ) => {
 
         ingredients.forEach(
             (ingredient, index) => notInMyFridgeJSX.push(
-                <RecipeIngredientItem key={ ingredient.id + index } ingredient={ ingredient }/>
+                <RecipeIngredientItem key={ 'missing' + ingredient.id + index } ingredient={ ingredient }/>
             )
         );
 
